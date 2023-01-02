@@ -1,0 +1,605 @@
+ C
+OMPUTER
+ O
+RGANIZATION
+ 
+AND
+ A
+RCHITECTURE
+D
+ESIGNING
+ 
+FOR
+ P
+ERFORMANCE
+N
+INTH
+ E
+DITION
+William Stallings
+Boston Columbus Indianapolis NewYork SanFrancisco UpperSaddleRiver
+Amsterdam Cape Town Dubai London Madrid Milan Munich Paris MontréalToronto
+Delhi MexicoCity SãoPaulo Sydney HongKong Seoul SingaporeTaipeiTokyo
+Credits: 
+Figure 2.14: reprinted with permission fromThe Computer Language Company, Inc. Figure 17.10: 
+Buyya, Rajkumar, High-Performance Cluster Computing:Architectures and Systems,Vol I, 1st edition, 
+©1999. Reprinted and Electronically reproduced by permission of Pearson Education, Inc. Upper Saddle  
+
+River, New Jersey, Figure 17.11: Reprinted with permission from EthernetAlliance.
+Credits and acknowledgments borrowed from other sources and reproduced, with permission, in this 
+textbook appear on the appropriate page within text.
+Copyright © 2013, 2010, 2006 by Pearson Education, Inc., publishing as Prentice Hall.All rights 
+reserved. Manufactured in the United States ofAmerica.This publication is protected by Copyright, 
+
+and permission should be obtained from the publisher prior to any prohibited reproduction, storage in 
+
+a retrieval system, or transmission in any form or by any means, electronic, mechanical, photocopying, 
+recording, or likewise.To obtain permission(s) to use material from this work, please submit a written 
+
+request to Pearson Education, Inc., Permissions Department, One Lake Street, Upper Saddle River, 
+
+New Jersey 07458, or you may fax your request to 201-236-3290.
+Many of the designations by manufacturers and sellers to distinguish their products are claimed as 
+trademarks.Where those designations appear in this book, and the publisher was aware of a trademark 
+
+claim, the designations have been printed in initial caps or all caps.
+Library of Congress Cataloging-in-Publication Data availa ble upon request
+
+10 9 8 7 6 5 4 3 2 1
+ISBN 10:     0-13-293633-X
+ISBN 13: 978-0-13-293633-0
+Editorial Director:
+ 
+Marcia Horton
+Executive Editor:
+ 
+Tracy Dunkelberger
+Associate Editor:
+ 
+Carole Snyder
+Director of Marketing:
+ 
+Patrice Jones
+Marketing Manager: 
+Yez Alayan
+Marketing Coordinator: 
+Kathryn Ferranti
+Marketing Assistant: 
+Emma Snider
+Director of Production: 
+Vince O’Brien
+Managing Editor: 
+Jeff Holcomb
+Production Project Manager: 
+Kayla Smith-Tarbox
+Production Editor: 
+Pat Brown
+Manufacturing Buyer: 
+Pat Brown
+Creative Director: 
+Jayne Conte
+Designer: 
+Bruce Kenselaar
+Manager, Visual Research: 
+Karen Sanatar
+Manager, Rights and Permissions: 
+Mike Joyce
+Text Permission Coordinator: 
+Jen Roach
+Cover Art:
+ Charles Bowman/Robert Harding
+Lead Media Project Manager: 
+Daniel Sandin
+Full-Service Project Management: 
+Shiny Rajesh/
+ 
+ 
+Integra Software Services Pvt. Ltd.
+Composition: 
+Integra Software Services Pvt. Ltd.
+Printer/Binder: 
+Edward Brothers
+Cover Printer: 
+Lehigh-Phoenix Color/Hagerstown
+Text Font: 
+Times Ten-Roman
+To Tr icia (ATS), 
+my loving wife, the kindest  
+and gentlest person
+This page intentionally left blank 
+v
+Online Resources xi
+Pref ace xiii
+About theAuthor xxi
+Chapter 0 Reader’s and Instr uctor’s Guide 1
+ 0.1 
+Outline of the Book 2
+ 0.2 
+A Roadmap for Reader s and Instr uctor s 2
+ 0.3 
+Why Study Computer Organization andArchitecture? 3
+ 0.4 
+Inter net andWeb Resources 5
+PART ONE OVERVIEW 6
+Chapter 1 Introduction 6
+ 1.1 
+Organization andArchitecture 7
+ 1.2 
+Str ucture and Function 8
+ 1.3 
+KeyTer ms and Review Questions 14
+Chapter 2 Computer Evolution and Perfor mance 15
+ 2.1 
+A Br ief Histor y of Computer s 16
+ 2.2 
+Designing for Perfor mance 37
+ 2.3 
+Multicore, MICs, and GPGPUs 43
+ 2.4 
+The Evolution of the Intel x86Architecture 44
+ 2.5 
+Embedded Systems and theARM 45
+ 2.6 
+Perfor mance Assessment 49
+ 2.7 
+Recommended Reading 59
+ 2.8 
+KeyTer ms, Review Questions, and Problems 60
+PART TWO THE COMPUTER SYSTEM 65
+Chapter 3 ATop-LevelView of Computer Function 
+and Interconnection 65
+ 3.1 
+Computer Components 66
+ 3.2 
+Computer Function 68
+ 3.3 
+Interconnection Str uctures 84
+ 3.4 
+Bus Interconnection 85
+ 3.5 
+Point-To-Point Interconnect 93
+ 3.6 
+PCI Express 98
+ 3.7 
+Recommended Reading 108
+ 3.8 
+KeyTer ms, Review Questions, and Problems 108
+Chapter 4 Cache Memor y 112
+ 4.1 
+Computer Memor y System Over view 113
+ 4.2 
+Cache Memor y Pr inciples 120
+ 4.3 
+Elements of Cache Design 123
+C
+ONTENTS
+vi
+  CONTENTS
+ 4.4 
+Pentium 4 Cache Organization 141
+ 4.5 
+ARM Cache Organization 144
+ 4.6 
+Recommended Reading 146
+ 4.7 
+KeyTer ms, Review Questions, and Problems 147
+  Appendix 4A Perfor mance Character istics of Two-Level Memor ies 152
+Chapter 5 Inter nal Memor y 159
+ 5.1 
+Semiconductor Main Memor y 160
+ 5.2 
+Er ror Cor rection 170
+ 5.3 
+Advanced DRAM Organization 174
+ 5.4 
+Recommended Reading 180
+ 5.5 
+KeyTer ms, Review Questions, and Problems 181
+Chapter 6 Exter nal Memor y 185
+
+ 6.1 
+Magnetic Disk 186
+ 6.2 
+RAID 195
+ 6.3 
+Solid State Dr ives 205
+ 6.4 
+Optical Memor y 210
+ 6.5 
+Magnetic Tape 215
+ 6.6 
+Recommended Reading 217
+ 6.7 
+KeyTer ms, Review Questions, and Problems 218
+Chapter 7 Input/Output 221
+
+ 7.1 
+Exter nal Devices 223
+ 7.2 
+I/O Modules 226
+ 7.3 
+Prog rammed I/O 228
+ 7.4 
+Inter r upt-Dr iven I/O 232
+ 7.5 
+Direct Memor yAccess 240
+ 7.6 
+I/O Channels and Processor s 246
+ 7.7 
+The Exter nal Interf ace:Thunderbolt and Inﬁniband 248
+ 7.8 
+IBM zEnter pr ise 196 I/O Str ucture 256
+ 7.9 
+Recommended Reading 260
+ 7.10 
+KeyTer ms, Review Questions, and Problems 260
+Chapter 8 Operating System Suppor t 265
+
+ 8.1 
+Operating System Over view 266
+ 8.2 
+Scheduling 277
+ 8.3 
+Memor y Management 283
+ 8.4 
+Pentium Memor y Management 294
+ 8.5 
+ARM Memor y Management 299
+ 8.6 
+Recommended Reading 304
+ 8.7 
+KeyTer ms, Review Questions, and Problems 304
+PART THREE ARITHMETICAND LOGIC 309
+Chapter 9 Number Systems 309
+
+ 9.1 
+The Decimal System 310
+ 9.2 
+Positional Number Systems 311
+ 9.3 
+The Binar y System 312
+ 9.4 
+Conver ting Between Binar y and Decimal 312
+CONTENTS  
+vii
+ 9.5 
+Hexadecimal Notation 315
+ 9.6 
+Recommended Reading 317
+ 9.7 
+KeyTer ms and Problems 317
+Chapter 10 ComputerAr ithmetic 319
+
+ 10.1 
+TheAr ithmetic and Log ic Unit 320
+ 10.2 
+Integer Representation 321
+ 10.3 
+Integer Ar ithmetic 326
+ 10.4 
+Floating-Point Representation 341
+ 10.5 
+Floating-Point Ar ithmetic 349
+ 10.6 
+Recommended Reading 358
+ 10.7 
+KeyTer ms, Review Questions, and Problems 359
+Chapter 11 Dig ital Log ic 364
+
+ 11.1 
+Boolean Algebra 365
+ 11.2 
+Gates 368
+ 11.3 
+Combinational Circuits 370
+ 11.4 
+Sequential Circuits 388
+ 11.5 
+Prog rammable Log ic Devices 397
+ 11.6 
+Recommended Reading 401
+ 11.7 
+KeyTer ms and Problems 401
+PART FOUR THE CENTRAL PROCESSING UNIT 405
+Chapter 12 Instr uction Sets: Character istics and Functions 405
+
+ 12.1 
+Machine Instr uction Character istics 406
+ 12.2 
+Types of Operands 413
+ 12.3 
+Intel x86 andARM DataTypes 415
+ 12.4 
+Types of Operations 418
+ 12.5 
+Intel x86 andARM OperationTypes 431
+ 12.6 
+Recommended Reading 441
+ 12.7 
+KeyTer ms, Review Questions, and Problems 441
+  Appendix 12A Little-, Big-, and Bi-Endian 447
+Chapter 13 Instr uction Sets:Addressing Modes and For mats 451
+
+ 13.1 
+Addressing Modes 452
+ 13.2 
+x86 andARMAddressing Modes 459
+ 13.3 
+Instr uction For mats 464
+ 13.4 
+x86 andARM Instr uction For mats 473
+ 13.5 
+Assembly Language 477
+ 13.6 
+Recommended Reading 479
+ 13.7 
+KeyTer ms, Review Questions, and Problems 479
+Chapter 14 Processor Str ucture and Function 483
+
+ 14.1 
+Processor Organization 484
+ 14.2 
+Reg ister Organization 486
+ 14.3 
+Instr uction Cycle 491
+ 14.4 
+Instr uction Pipelining 495
+ 14.5 
+The x86 Processor Family 512
+viii
+  CONTENTS
+ 14.6 
+TheARM Processor 520
+ 14.7 
+Recommended Reading 526
+ 14.8 
+KeyTer ms, Review Questions, and Problems 527
+Chapter 15 Reduced Instr uction Set Computer s 531
+
+ 15.1 
+Instr uction Execution Character istics 533
+ 15.2 
+The Use of a Large Reg ister File 538
+ 15.3 
+Compiler-Based Reg ister Optimization 543
+ 15.4 
+Reduced Instr uction SetArchitecture 545
+ 15.5 
+RISC Pipelining 551
+ 15.6 
+MIPS R4000 556 
+ 15.7 
+SPARC 562
+ 15.8 
+RISCVer sus CISC Controver sy 568
+ 15.9 
+Recommended Reading 569
+ 15.10 
+KeyTer ms, Review Questions, and Problems 569
+Chapter 16 Instr uction-Level Parallelism and Super scalar Processor s 573
+
+ 16.1 
+Over view 574
+ 16.2 
+Design Issues 579
+ 16.3 
+Pentium 4 589
+ 16.4 
+ARM Cor tex-A8 595
+ 16.5 
+Recommended Reading 603
+ 16.6 
+KeyTer ms, Review Questions, and Problems 605
+PART FIVE PARALLEL ORGANIZATION 611
+Chapter 17 Parallel Processing 611
+
+ 17.1 
+Multiple Processor Organizations 613
+ 17.2 
+Symmetr ic Multiprocessor s 615
+ 17.3 
+Cache Coherence and the MESI Protocol 619
+ 17.4 
+Multithreading and Chip Multiprocessor s 626
+ 17.5 
+Cluster s 633
+ 17.6 
+Nonunifor m Memor yAccess 640
+ 17.7 
+Vector Computation 644
+ 17.8 
+Recommended Reading 656
+ 17.9 
+KeyTer ms, Review Questions, and Problems 657
+Chapter 18 Multicore Computer s 664
+
+ 18.1 
+Hardware Perfor mance Issues 665
+ 18.2 
+Software Perfor mance Issues 669
+ 18.3 
+Multicore Organization 674
+ 18.4 
+Intel x86 Multicore Organization 676
+ 18.5 
+ARM11 MPCore 679
+ 18.6 
+IBM zEnter pr ise 196 Mainframe 684
+ 18.7 
+Recommended Reading 687
+ 18.8 
+KeyTer ms, Review Questions, and Problems 687
+CONTENTS  
+ix
+ 
+AppendixA Projects forTeaching Computer Organization  
+and Architecture 691
+ A.1 
+Interactive Simulations 692
+ A.2 
+Research Projects 694
+ A.3 
+Simulation Projects 694
+ A.4 
+Assembly Language Projects 695
+ A.5 
+Reading/Repor t Assignments 696
+ A.6 
+Wr iting Assignments 696
+ A.7 
+Test Bank 696
+ 
+Appendix B Assembly Language and RelatedTopics 697
+ B.1 
+Assembly Language 698
+ B.2 
+Assembler s 706
+ B.3 
+Loading and Linking 710
+ B.4 
+Recommended Reading 718
+ B.5 
+KeyTer ms, Review Questions, and Problems 719
+ONLINE CHAPTERS
+1
+PART SIX THE CONTROL UNIT 19-1
+Chapter 19 Control Unit Operation 19-1
+
+ 19.1 
+Micro-operations 19-3
+ 19.2 
+Control of the Processor 19-13
+ 19.3 
+Hardwired Implementation 19-30
+ 19.4 
+Recommended Reading 19-35
+ 19.5 
+KeyTer ms, Review Questions, and Problems 19-35
+Chapter 20 Microprog rammed Control 20-1
+
+ 20.1 
+Basic Concepts 20-3
+ 20.2 
+Microinstr uction Sequencing 20-16
+ 20.3 
+Microinstr uction Execution 20-26
+ 20.4 
+TI 8800 20-45
+ 20.5 
+Recommended Reading 20-59
+ 20.6 
+KeyTer ms, Review Questions, and Problems 20-60
+ONLINE APPENDICES
+ 
+Appendix C
+ 
+Hash Tables 
+ 
+Appendix D
+ 
+Victim Cache Strateg ies 
+ D.1 
+Victim Cache 
+ D.2 
+Selective Victim Cache 
+1
+Online chapters, appendices, and other documents are Premium Content, available via the access card 
+at the front of this book.
+x
+  CONTENTS
+ 
+Appendix E
+ 
+Interleaved Memor y 
+ 
+Appendix F
+ 
+The Inter national ReferenceAlphabet 
+ 
+Appendix G
+ 
+Vir tual Memor y Page ReplacementAlgor ithms 
+ G.1 
+Optimal 
+ G.2 
+Least Recently Used 
+ G.3 
+Fir st-In-Fir st-Out 
+ G.4 
+Other Page ReplacementAlgor ithms 
+ 
+Appendix H
+ 
+Recur sive Procedures 
+ H.1 
+Recur sion 
+ H.2 
+Activation Tree Representation 
+ H.3 
+Stack Processing 
+ H.4 
+Recur sion and Iteration 
+ 
+Appendix I
+ 
+Additional Instr uction PipelineTopics 
+ I.1 
+Pipeline Reser vationTables 
+ I.2 
+Reorder Buffer s 
+ I.3 
+Tomasulo’s Algor ithm 
+ I.4 
+Scoreboarding 
+ 
+Appendix J
+ 
+Linear Tape Open Technology 
+ J.1 
+LTO Generations 
+ J.2 
+LTO For mat 
+ J.3 
+LTO Operation 
+ 
+Appendix K
+ 
+DDR SRAM 
+ 
+Appendix L
+ 
+Protocols and ProtocolArchitectures 
+ L.1 
+Introduction 
+ L.2 
+The TCP/IP Protocol Architecture 
+ L.3 
+The Role of an Inter net Protocol 
+ L.4 
+IPv4 
+ L.5 
+IPv6 
+ L.6 
+The OSI ProtocolArchitecture 
+ 
+Appendix M
+ 
+Scrambling 
+ 
+Appendix N
+ 
+Timing Diag rams 
+ 
+Appendix O
+ 
+Stacks 
+ O.1 
+Stack Str ucture 
+ O.2 
+Stack Implementation 
+ O.3 
+Expression Evaluation 
+Glossar y 723
+References 733
+
+Index 745
